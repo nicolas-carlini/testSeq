@@ -1,0 +1,27 @@
+version: '3'
+
+volumes:
+  example_dev_mysql_data: {}
+
+services:
+  example_dev:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    env_file: .env
+    volumes:
+      - /app/node_modules
+      - ../:/app:delegated
+    depends_on:
+      - example_dev_mysql
+    ports:
+      - '8000:8000'
+
+  example_dev_mysql:
+    image: mysql:5.7
+    volumes:
+      - example_dev_mysql_data:/var/lib/mysql
+    env_file:
+      - .env
+    ports:
+      - '8100:3306'
